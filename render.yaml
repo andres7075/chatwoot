@@ -4,13 +4,12 @@ services:
     env: docker
     plan: standard
     autoDeploy: true
+    dockerfilePath: ./docker/Dockerfile
     envVars:
       - key: RAILS_ENV
         value: production
       - key: INSTALLATION_ENV
         value: docker
-      - key: WEB_CONCURRENCY
-        value: 2
       - key: DATABASE_URL
         fromDatabase:
           name: chatwoot-db
@@ -30,6 +29,7 @@ services:
     env: docker
     plan: standard
     autoDeploy: true
+    dockerfilePath: ./docker/Dockerfile
     envVars:
       - key: RAILS_ENV
         value: production
@@ -45,7 +45,7 @@ services:
           type: redis
           property: connectionString
       - key: SECRET_KEY_BASE
-        generateValue: true
+        sync: true
 
 databases:
   - name: chatwoot-db
@@ -54,3 +54,4 @@ databases:
 redis:
   - name: chatwoot-redis
     plan: standard
+
