@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: chatwoot-web
+    env: docker
+    plan: standard
+    autoDeploy: true
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: INSTALLATION_ENV
+        value: docker
+      - key: WEB_CONCURRENCY
+        value: 2
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chatwoot-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: chatwoot-redis
+          type: redis
+          property: connectionString
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://your-app.onrender.com
+
+  - type: worker
+    name: chatwoot-worker
+    env: docker
+    plan: standard
+    autoDeploy: true
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: INSTALLATION_ENV
+        value: docker
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chatwoot-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: chatwoot-redis
+          type: redis
+          property: connectionString
+      - key: SECRET_KEY_BASE
+        generateValue: true
+
+databases:
+  - name: chatwoot-db
+    plan: standard
+
+redis:
+  - name: chatwoot-redis
+    plan: standard
